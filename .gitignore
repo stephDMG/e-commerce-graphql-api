@@ -1,0 +1,31 @@
+# Node.js
+node_modules/
+dist/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+*.pid
+
+# Dependency directories
+# (Bower und JSPM sind veraltet und können ignoriert werden.)
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary files
+*.tmp
+*.swp
+
+# Environment variables
+.env
