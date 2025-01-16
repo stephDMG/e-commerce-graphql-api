@@ -1,0 +1,173 @@
+"""
+Das Product-Schema definiert die Struktur eines Produkts im E-Commerce-System.
+Es enthält alle relevanten Felder, die für die Darstellung und Verwaltung eines Produkts benötigt werden.
+"""
+type Product {
+    """
+    Die eindeutige ID des Produkts.
+    """
+    id: ID!
+
+    """
+    Der Name des Produkts.
+    """
+    name: String!
+
+    """
+    Eine detaillierte Beschreibung des Produkts.
+    """
+    description: String!
+
+    """
+    Der Preis des Produkts. Unterstützt dynamische Währungsumrechnung.
+    Standardwährung ist EUR.
+    """
+    price(currency: String = "EUR"): Float!
+
+    """
+    Die SKU (Stock Keeping Unit) des Produkts, eine eindeutige Kennung für die Lagerhaltung.
+    """
+    sku: String
+
+    """
+    Die Marke oder der Hersteller des Produkts.
+    """
+    brand: String
+
+    """
+    Eine Liste von Bildern, die das Produkt darstellen.
+    """
+    images: [Image!]!
+
+    """
+    Der aktuelle Lagerbestand des Produkts.
+    """
+    stock: Int!
+
+    """
+    Die Kategorie, zu der das Produkt gehört.
+    """
+    category: Category!
+
+    """
+    Eine Liste von Varianten dieses Produkts (z. B. unterschiedliche Farben oder Größen).
+    """
+    variants: [ProductVariant!]!
+
+    """
+    Die durchschnittliche Bewertung des Produkts basierend auf Kundenbewertungen.
+    """
+    rating: Float
+
+    """
+    Eine Liste von Kundenbewertungen für das Produkt.
+    """
+    reviews: [Review]
+}
+
+"""
+Das Schema für eine Produktvariante, z. B. unterschiedliche Größen oder Farben eines Produkts.
+"""
+type ProductVariant {
+    id: ID!
+
+    """
+    Die Farbe der Produktvariante.
+    """
+    color: String!
+
+    """
+    Die Größe der Produktvariante (z. B. S, M, L).
+    """
+    size: String!
+
+    """
+    Der Preis der spezifischen Variante. Unterstützt Währungsumrechnung.
+    """
+    price(currency: String = "EUR"): Float!
+
+    """
+    Der Lagerbestand dieser spezifischen Variante.
+    """
+    stock: Int!
+}
+
+"""
+Das Schema für Kategorien, zu denen Produkte gehören können (z. B. Kleidung, Elektronik).
+"""
+type Category {
+    id: ID!
+
+    """
+    Der Name der Kategorie (z. B. "Elektronik").
+    """
+    name :String!
+
+    """
+    Eine optionale Beschreibung der Kategorie .
+    """
+    description :String
+
+    """
+    Die übergeordnete Kategorie , falls vorhanden .
+    """
+    parentCategory :Category
+
+    """ Produkte in dieser Kategorie mit Pagination-Unterstützung."""
+    products(limit:Int ,offset:Int):[Product]
+}
+
+"""
+Das Schema für ein Bild, das ein Produkt darstellt.
+"""
+type Image {
+    id: ID!
+    url: String!
+    altText: String
+}
+
+"""
+Zusätzliche Informationen zur Pagination von Abfragen (z. B. Produkte in einer Kategorie).
+"""
+type PageInfo {
+    hasNextPage :Boolean!
+    hasPreviousPage:Boolean!
+    startCursor:String
+    endCursor:String
+}
+
+"""
+Eine Verbindung zwischen Produkten und Pagination-Informationen .
+"""
+type ProductConnection{
+    edges:[ProductEdge!]!
+    pageInfo :PageInfo!
+    totalCount:Int!
+}
+
+"""
+Ein einzelnes Produkt in einer paginierten Liste mit einem Cursor zur Navigation .
+"""
+type ProductEdge {
+    node :Product!
+    cursor:String!
+}
+
+"""
+Das Schema für Kundenbewertungen eines Produkts .
+"""
+type Review{
+    id :ID!
+
+    """ Benutzer-ID ,die die Bewertung abgegeben hat."""
+    userId :ID!
+
+    """ Sternebewertung (z.B. zwischen `1` und `5`)"""
+    rating :Float!
+
+    """ Ein optionaler Kommentar zur Bewertung."""
+    comment:String
+
+    """ Zeitstempel wann erstellt wurde."""
+    createdAt:String!
+}
